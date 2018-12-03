@@ -83,14 +83,19 @@ namespace Xwt
 				return;
 			Initialize (null);
 		}
-		
+
 		/// <summary>
 		/// Initialize Xwt with the specified type.
 		/// </summary>
 		/// <param name="type">The toolkit type.</param>
 		public static void Initialize (ToolkitType type)
 		{
-			Initialize (Toolkit.GetBackendType (type));
+			Initialize (type, false);
+		}
+
+		public static void Initialize (ToolkitType type, bool isGuest)
+		{
+			Initialize (Toolkit.GetBackendType (type), isGuest);
 			toolkit.Type = type;
 		}
 
@@ -99,11 +104,16 @@ namespace Xwt
 		/// </summary>
 		/// <param name="backendType">The <see cref="Type.FullName"/> of the backend type.</param>
 		public static void Initialize (string backendType)
-		{			
+		{
+			Initialize (backendType, false);
+		}
+
+		public static void Initialize (string backendType, bool isGuest)
+		{
 			if (engine != null)
 				return;
 
-			toolkit = Toolkit.Load (backendType, false);
+			toolkit = Toolkit.Load (backendType, isGuest);
 			toolkit.SetActive ();
 			engine = toolkit.Backend;
 			mainLoop = new UILoop (toolkit);
@@ -119,7 +129,7 @@ namespace Xwt
 		/// <param name="type">The toolkit type.</param>
 		public static void InitializeAsGuest (ToolkitType type)
 		{
-			Initialize (type);
+			Initialize (type, true);
 			toolkit.ExitUserCode (null);
 		}
 		
@@ -131,7 +141,7 @@ namespace Xwt
 		{
 			if (backendType == null)
 				throw new ArgumentNullException ("backendType");
-			Initialize (backendType);
+			Initialize (backendType, true);
 			toolkit.ExitUserCode (null);
 		}
 
