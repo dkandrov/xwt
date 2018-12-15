@@ -226,13 +226,23 @@ namespace Xwt
 		/// <param name="type">The toolkit type.</param>
 		public static Toolkit Load (ToolkitType type)
 		{
+			return Load (type, false);
+		}
+
+		/// <summary>
+		/// Load a toolkit of a specified type.
+		/// </summary>
+		/// <param name="type">The toolkit type.</param>
+		/// <param name="isGuest">Whether the Xwt is a guest and shouldn't do a full initialization</param>
+		public static Toolkit Load (ToolkitType type, bool isGuest)
+		{
 			var et = toolkits.Values.FirstOrDefault (tk => tk.toolkitType == type);
 			if (et != null)
 				return et;
 
 			Toolkit t = new Toolkit ();
 			t.toolkitType = type;
-			t.LoadBackend (GetBackendType (type), true, true);
+			t.LoadBackend (GetBackendType (type), isGuest, true);
 			return t;
 		}
 
